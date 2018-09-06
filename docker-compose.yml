@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+
+  wordpress:
+    image: wordpress
+    volumes:
+      - ./wp-content:/var/www/html/wp-content/
+    restart: always
+    depends_on:
+      - mysql
+    links: 
+      - mysql
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: panoramica
+      WORDPRESS_DB_PASSWORD: c3W6n4KbT27pHH7R
+    ports:
+      - "80:80"
+  mysql:
+    image: mysql:5.7
+    container_name: db
+    volumes:
+      - wp_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: c3W6n4KbT27pHH7R
+      MYSQL_DATABASE: panoramica
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: admindb
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    environment:
+     - PMA_ARBITRARY=1
+volumes:
+  wp_data:
